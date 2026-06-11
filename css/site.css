@@ -125,6 +125,50 @@ a:focus {
    text-decoration: none;
 }
 
+.nav-toggle {
+   position: absolute;
+   width: 1px;
+   height: 1px;
+   overflow: hidden;
+   clip: rect(0 0 0 0);
+   clip-path: inset(50%);
+   white-space: nowrap;
+}
+
+.nav-toggle-button {
+   display: none;
+   width: 42px;
+   height: 42px;
+   align-items: center;
+   justify-content: center;
+   flex-direction: column;
+   gap: 5px;
+   border: 1px solid var(--line);
+   border-radius: 8px;
+   background: rgba(255, 255, 255, 0.78);
+   cursor: pointer;
+   transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.nav-toggle-button span {
+   display: block;
+   width: 18px;
+   height: 2px;
+   border-radius: 999px;
+   background: var(--accent-hover);
+   transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.nav-toggle-button:hover {
+   border-color: var(--accent-border);
+   background: var(--accent-soft);
+}
+
+.nav-toggle:focus-visible + .nav-toggle-button {
+   outline: 2px solid var(--accent-border);
+   outline-offset: 3px;
+}
+
 a:focus-visible {
    outline: 2px solid var(--accent-border);
    outline-offset: 3px;
@@ -290,7 +334,7 @@ p {
 
 .timeline-item {
    display: grid;
-   grid-template-columns: 210px minmax(0, 1fr);
+   grid-template-columns: 230px minmax(0, 1fr);
    gap: 28px;
    padding: 22px;
    border: 1px solid var(--line);
@@ -311,6 +355,11 @@ p {
 }
 
 .timeline-meta {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   justify-content: flex-start;
+   gap: 10px;
    color: var(--muted);
    font-size: 14px;
    line-height: 1.55;
@@ -320,7 +369,7 @@ p {
    display: flex;
    align-items: center;
    gap: 10px;
-   margin-bottom: 6px;
+   min-height: 38px;
 }
 
 .timeline-logo {
@@ -341,18 +390,62 @@ p {
 .timeline-name {
    color: var(--text);
    font-family: 'opensans-semibold', Arial, sans-serif;
+   font-size: 16px;
+   line-height: 1.35;
 }
 
 .timeline-date {
    display: inline-flex !important;
+   align-items: center;
    width: fit-content;
-   padding: 2px 8px;
+   min-height: 27px;
+   padding: 3px 9px;
    border: 1px solid var(--accent-border);
    border-radius: 999px;
    background: var(--accent-soft);
    color: var(--accent-hover);
    font-family: 'opensans-semibold', Arial, sans-serif;
    font-size: 12px;
+   line-height: 1.5;
+}
+
+.timeline-detail {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   justify-content: flex-start;
+   gap: 10px;
+   padding-top: 3px;
+}
+
+.timeline-role-row {
+   display: flex;
+   align-items: flex-start;
+   justify-content: flex-start;
+   width: 100%;
+   gap: 10px;
+   flex-wrap: wrap;
+}
+
+.timeline-role {
+   margin-bottom: 0;
+   color: var(--text);
+   font-family: 'opensans-bold', Arial, sans-serif;
+}
+
+.timeline-team {
+   display: inline-flex;
+   align-items: center;
+   width: fit-content;
+   margin: 0;
+   min-height: 27px;
+   padding: 3px 9px;
+   border: 1px solid var(--line);
+   border-radius: 999px;
+   background: var(--surface-muted);
+   color: var(--muted);
+   font-family: 'opensans-semibold', Arial, sans-serif;
+   font-size: 13px;
    line-height: 1.5;
 }
 
@@ -460,20 +553,54 @@ p {
 }
 
 @media only screen and (max-width: 760px) {
-   .site-nav,
    .site-footer {
       flex-direction: column;
       align-items: flex-start;
    }
 
    .site-nav {
+      flex-wrap: wrap;
       padding-top: 22px;
+      gap: 14px;
+   }
+
+   .brand {
+      max-width: calc(100% - 58px);
+   }
+
+   .nav-toggle-button {
+      display: flex;
+      margin-left: auto;
    }
 
    .nav-links {
+      display: none;
       width: 100%;
-      justify-content: flex-start;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 4px;
+      padding: 8px;
+      box-shadow: var(--shadow-soft);
+   }
+
+   .nav-links a {
+      padding: 10px 12px;
+   }
+
+   .nav-toggle:checked ~ .nav-links {
+      display: flex;
+   }
+
+   .nav-toggle:checked + .nav-toggle-button span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+   }
+
+   .nav-toggle:checked + .nav-toggle-button span:nth-child(2) {
+      opacity: 0;
+   }
+
+   .nav-toggle:checked + .nav-toggle-button span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
    }
 
    .page-shell {
@@ -507,6 +634,14 @@ p {
    .timeline-item,
    .project-card {
       gap: 16px;
+   }
+
+   .timeline-detail {
+      padding-top: 0;
+   }
+
+   .timeline-role-row {
+      gap: 8px;
    }
 
    .project-card {
